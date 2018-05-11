@@ -1,0 +1,54 @@
+---
+title: "Exploring higgs boson data with naniar"
+author: "Nicholas Spyrison"
+date: "28 February 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "C:/Users/nspy0001/Dropbox/_Main/R/higgs-boson")
+```
+
+
+# Sources
+[naniar vignette](http://naniar.njtierney.com/articles/getting-started-w-naniar.html)
+
+[LHC data](http://opendata.cern.ch/record/328)
+
+[Kaggle machine learning comp](https://www.kaggle.com/c/higgs-boson)
+
+
+```{r Libraries, load, mung}
+library(naniar) #requires += colorspace, ggplot2 ?
+library(ggplot2)
+
+raw_training = read.csv("./data/training.csv") # load raw training data, 250,000 x 33
+raw_training[raw_training==-999] <- NA         # set NAs
+
+#n=250,000 is too large, we'll look at 10,000 first.
+data = raw_training[1:10000,]
+
+```
+
+
+```{r First go}
+visdat::vis_dat(data)
+
+visdat::vis_miss(data)
+
+gg_miss_var(data, show_pct=TRUE)
+
+#gg_miss_var(data, facet = data$PRI_jet_num) #err
+#gg_miss_var(data, facet = data$Label)       #err
+
+shadow <- bind_shadow(data)
+
+
+ggplot(shadow,
+       aes(x = DER_mass_vis,
+           colour = DER_mass_jet_jet_NA)) + 
+  geom_density()
+```
+
+

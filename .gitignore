@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
+# track, butignore all files in the _kenji/ directory
+!_Kenji/
+data/*.csv
